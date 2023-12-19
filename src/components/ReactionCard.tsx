@@ -40,11 +40,12 @@ export const ReactionCard: React.FC<Props> = ({
 					aria-label="Close"
 					bg="#fff"
 					float="right"
+					border="none"
 					icon={<FaTimes size="26px" />}
 					_hover={{
 						border: "none",
 						bg: "white",
-						svg: { fill: "black" },
+						svg: { fill: "grey" },
 					}}
 				/>
 				<Flex mt="50px" flexDir="column">
@@ -97,12 +98,17 @@ export const ReactionCard: React.FC<Props> = ({
 							isDisabled={
 								comment.content === "" || comment.emoji === ""
 							}
+							_hover={{
+								border: "none",
+								bg: "white",
+							}}
 							zIndex={100}
 							w="min-content"
 							right="25px"
 							bottom="25px"
 							position="absolute"
 							bg={"transparent"}
+							border={"none"}
 							color="#0180ff"
 							icon={<FiSend size="30px" />}
 							aria-label={"Save"}
