@@ -9,30 +9,30 @@ import {
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
 import { CommentType } from "../App";
+import { FiSend } from "react-icons/fi";
 
 type Props = {
 	label: string;
 	id: string;
 	comment: CommentType;
 	setComment: (comment: CommentType) => void;
-	ref: React.MutableRefObject<null>;
 	onClose: () => void;
-	cursorPosition: { x: number; y: number };
+	saveComment: () => void;
 };
 
 export const ReactionCard: React.FC<Props> = ({
 	id,
-	ref,
 	label,
 	onClose,
-	cursorPosition,
 	setComment,
 	comment,
+	saveComment,
 }) => {
 	return (
 		<Card
 			position="absolute"
-			style={{ left: cursorPosition.x, top: cursorPosition.y }}
+			style={{ left: comment.x, top: comment.y }}
+			borderRadius="12px"
 		>
 			<CardBody>
 				<IconButton
@@ -40,11 +40,16 @@ export const ReactionCard: React.FC<Props> = ({
 					aria-label="Close"
 					bg="#fff"
 					float="right"
-					icon={<FaTimes />}
+					icon={<FaTimes size="26px" />}
+					_hover={{
+						border: "none",
+						bg: "white",
+						svg: { fill: "black" },
+					}}
 				/>
 				<Flex mt="50px" flexDir="column">
-					<Flex fontSize={35} justifyContent="space-around" mb="20px">
-						{["😀", "😝", "🥰"].map(
+					<Flex fontSize={30} justifyContent="space-around" mb="20px">
+						{["😀", "😝", "🥰", "❤️‍🔥"].map(
 							(emoji: string, idx: number) => {
 								return (
 									<Text
@@ -52,9 +57,12 @@ export const ReactionCard: React.FC<Props> = ({
 										alignItems="center"
 										justifyContent="center"
 										key={`emoji-${idx}`}
-										border={
-											comment.emoji === emoji ? "2px" : ""
+										transform={
+											comment.emoji === emoji
+												? "scale(1.5)"
+												: ""
 										}
+										transition={"0.6s ease-in-out"}
 										borderRadius="50%"
 										w="50px"
 										h="50px"
@@ -72,20 +80,35 @@ export const ReactionCard: React.FC<Props> = ({
 							}
 						)}
 					</Flex>
-					<FormControl>
-						<Textarea
-							onChange={(e) =>
-								setComment({
-									...comment,
-									content: e.target.value,
-								})
+					<Flex>
+						<FormControl>
+							<Textarea
+								onChange={(e) =>
+									setComment({
+										...comment,
+										content: e.target.value,
+									})
+								}
+								id={id}
+								placeholder={label}
+							/>
+						</FormControl>
+						<IconButton
+							isDisabled={
+								comment.content === "" || comment.emoji === ""
 							}
-							ref={ref}
-							id={id}
-							placeholder={label}
+							zIndex={100}
+							w="min-content"
+							right="25px"
+							bottom="25px"
+							position="absolute"
+							bg={"transparent"}
+							color="#0180ff"
+							icon={<FiSend size="30px" />}
+							aria-label={"Save"}
+							onClick={() => saveComment()}
 						/>
-					</FormControl>
-					<IconButton aria-label={"Save"} />
+					</Flex>
 				</Flex>
 			</CardBody>
 		</Card>

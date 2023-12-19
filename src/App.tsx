@@ -1,32 +1,55 @@
 import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import { ReactionCard } from "./components/ReactionCard";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { CommentsCreated } from "./components/CommentsCreated";
 
 export type CommentType = {
 	content: string;
 	emoji: string;
+	date?: string;
+	x?: number;
+	y?: number;
 };
 
 const App: React.FC<Record<string, never>> = () => {
 	const { onOpen, onClose, isOpen } = useDisclosure();
-	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-	const firstFieldRef = useRef(null);
+	const [commentsCreated, setCommentsCreated] = useState<CommentType[]>([]);
 	const [newComment, setNewComment] = useState<CommentType>({
 		content: "",
 		emoji: "",
 	});
 
 	const createComment = (e: React.MouseEvent<Element>) => {
-		const x = e.clientX;
-		const y = e.clientY;
-
-		setCursorPosition({ x, y });
+		setNewComment({
+			...newComment,
+			x: e.clientX,
+			y: e.clientY,
+			date: new Date().toLocaleString(),
+		});
 		onOpen();
+	};
+
+	const saveComment = () => {
+		setCommentsCreated([...commentsCreated, newComment]);
+		setNewComment({
+			content: "",
+			emoji: "",
+		});
+		onClose();
+	};
+
+	const resetComment = () => {
+		setNewComment({
+			content: "",
+			emoji: "",
+		});
+		onClose();
 	};
 	return (
 		<>
 			<Box
 				minH="100vh"
+				cursor="copy"
 				position="relative"
 				bg="linear-gradient(249.91deg, rgb(255, 248, 244) 0%, rgb(222, 241, 255) 48.96%, rgb(255, 248, 244) 100%)"
 				onClick={(e: React.MouseEvent<Element>) => createComment(e)}
@@ -45,15 +68,17 @@ const App: React.FC<Record<string, never>> = () => {
 					</Text>
 				</Flex>
 			</Box>
+			{commentsCreated.map((comment: CommentType, idx: number) => {
+				return <CommentsCreated comment={comment} idx={idx} />;
+			})}
 			{isOpen && (
 				<ReactionCard
 					label="Add your comment"
-					onClose={onClose}
+					onClose={resetComment}
 					id={"comment"}
 					comment={newComment}
 					setComment={setNewComment}
-					ref={firstFieldRef}
-					cursorPosition={cursorPosition}
+					saveComment={saveComment}
 				/>
 			)}
 		</>
