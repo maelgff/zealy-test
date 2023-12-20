@@ -28,6 +28,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  cursor: normal;
+}
+
+#text-zone {
+  cursor: url("/chat.png"), auto;
 }
 
 h1 {

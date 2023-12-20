@@ -31,6 +31,7 @@ export const ReactionCard: React.FC<Props> = ({
 	return (
 		<Card
 			position="absolute"
+			cursor="normal"
 			style={{ left: comment.x, top: comment.y }}
 			borderRadius="12px"
 		>
@@ -38,13 +39,13 @@ export const ReactionCard: React.FC<Props> = ({
 				<IconButton
 					onClick={() => onClose()}
 					aria-label="Close"
-					bg="#fff"
+					bg="transparent"
 					float="right"
 					border="none"
 					icon={<FaTimes size="26px" />}
 					_hover={{
 						border: "none",
-						bg: "white",
+						bg: "transparent",
 						svg: { fill: "grey" },
 					}}
 				/>
@@ -84,6 +85,8 @@ export const ReactionCard: React.FC<Props> = ({
 					<Flex>
 						<FormControl>
 							<Textarea
+								fontFamily="circular"
+								autoFocus={true}
 								onChange={(e) =>
 									setComment({
 										...comment,
@@ -100,7 +103,7 @@ export const ReactionCard: React.FC<Props> = ({
 							}
 							_hover={{
 								border: "none",
-								bg: "white",
+								bg: "transparent",
 							}}
 							zIndex={100}
 							w="min-content"
